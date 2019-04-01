@@ -1,3 +1,5 @@
-# node-mongoose-migrate
+# mongoose-migrate
 
 A dead simple mongoose migrations tool.
+
+## Using in your project
