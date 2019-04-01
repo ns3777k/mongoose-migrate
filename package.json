@@ -1,0 +1,29 @@
+{
+  "name": "mongoose-migrate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "cli-table": "^0.3.1",
+    "commander": "^2.19.0",
+    "mongoose": "^5.4.20"
+  },
+  "bin": {
+    "migrate": "./lib/cli.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/node": "^7.2.2",
+    "rollup": "^1.7.4",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.2",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^4.0.1"
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "author": "Nikita Safonov <ns3777k@gmail.com>",
+  "license": "MIT"
+}

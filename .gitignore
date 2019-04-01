@@ -1,0 +1,5 @@
+.idea
+*.iml
+/migrations
+/dist
+/node_modules
