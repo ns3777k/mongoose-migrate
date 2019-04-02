@@ -1,45 +1,51 @@
+// TODO: migration already exists error info.
+// TODO: auto create migration directory
 import yargs from 'yargs';
 import { version } from '../../package.json';
-// import { validate as validateMigrations } from './validate-migrations';
-// import { validate as validateDsn } from './validate-dsn';
+import { validateDsn, validateMigrationDirectory } from './validation';
 // import FsLayer from '../migrator/FsLayer';
 // import DbLayer from '../migrator/DbLayer';
 // import ui from './ui';
 
 yargs
-  .scriptName('migrate')
+  .scriptName('mongoose-migrate')
   .version(version)
   .option('dsn', {
     alias: 'd',
-    describe: 'mongodb dsn'
+    demandOption: true,
+    nargs: 1,
+    describe: 'MongoDB dsn'
   })
   .option('migrations', {
     alias: 'm',
-    describe: 'path to migrations directory'
+    demandOption: true,
+    nargs: 1,
+    normalize: true,
+    describe: 'Path to migrations directory',
+    default: './migrations'
   })
-  .demandOption(['dsn, migrations'])
+  .check(argv => {
+    validateDsn(argv.dsn);
+    validateMigrationDirectory(argv.migrations);
+
+    return true;
+  })
   .command({
     command: 'list',
-    desc: 'list all migrations',
-    handler(argv) {
-      //
+    describe: 'list all migrations',
+    builder(yargs) {
+      return yargs.option('pending', {
+        alias: 'p',
+        type: 'boolean',
+        describe: 'Only pending migrations'
+      });
+    },
+    handler: argv => {
+      console.log(argv);
     }
   })
-  .help()
   .argv;
 
-//
-// p.version(version, '-v, --version')
-//   .option('-d, --dsn <dsn>', 'mongodb dsn')
-//   .option('-m, --migrations <migrationsPath>', 'path to migrations directory');
-//
-// p.on('option:dsn', function (dsn) {
-//   console.log(dsn);
-//   process.exit(1);
-// });
-//
-// p.on('option:migrations', validateMigrations(p, ui));
-//
 // p.command('list')
 //   .description('list all migrations')
 //   .option('-p, --pending')
