@@ -1,9 +1,9 @@
 import Table from 'cli-table';
 import chalk from 'chalk';
-import { Status } from './schema';
+import { STATE_DOWN } from '../migrator/index';
 
 function formatMigrationState(state) {
-  return state === Status.STATE_DOWN
+  return state === STATE_DOWN
     ? chalk.red.bold(state)
     : chalk.green.bold(state);
 }

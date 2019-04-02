@@ -3,7 +3,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 
 export default {
-  input: 'src/cli.js',
+  input: 'src/cli/index.js',
   output: { file: 'dist/index.js', format: 'cjs', indent: false },
 
   external: [

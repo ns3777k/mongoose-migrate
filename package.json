@@ -5,8 +5,8 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "cli-table": "^0.3.1",
-    "commander": "^2.19.0",
-    "mongoose": "^5.4.20"
+    "mongoose": "^5.4.20",
+    "yargs": "^13.2.2"
   },
   "bin": {
     "migrate": "./dist/index.js"
@@ -22,6 +22,7 @@
     "rollup-plugin-node-resolve": "^4.0.1"
   },
   "scripts": {
+    "setup": "npm ci",
     "build": "rollup -c"
   },
   "author": "Nikita Safonov <ns3777k@gmail.com>",

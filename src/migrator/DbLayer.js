@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
-import { Status } from './schema';
+import { MigrationSchema } from './schemas/MigrationSchema';
+import { STATE_DOWN, STATE_UP } from './index';
 
 export default class DbLayer {
-  constructor(dsn, schemas = []) {
+  constructor(dsn) {
     this.dsn = dsn;
-    this.schemas = schemas;
+    this.schemas = [
+      { name: 'Migration', schema: MigrationSchema }
+    ];
   }
 
   async connect() {
@@ -24,7 +27,7 @@ export default class DbLayer {
     const model = this.client.models.Migration;
 
     if (options.pending) {
-      filter.state = Status.STATE_DOWN;
+      filter.state = STATE_DOWN;
     }
 
     if (Array.isArray(options.migrations) && options.migrations.length > 0) {
@@ -34,8 +37,8 @@ export default class DbLayer {
     return model.find(filter).sort({ createdAt: -1 });
   }
 
-  upMigration(migration) {
-    migration.state = Status.STATE_UP;
+  applyMigration(migration) {
+    migration.state = STATE_UP;
     return migration.save();
   }
 

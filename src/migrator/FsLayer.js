@@ -1,9 +1,9 @@
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 
-export default class FsLayer {
+class FsLayer {
   constructor(directory) {
-    this.directory = directory || './migrations';
+    this.directory = directory;
     this.template = `// Migration: {{ name }}
 
 async function up(mongoose) {
@@ -34,3 +34,5 @@ module.exports = { up, down };
     return resolve(this.directory, `${name}.js`);
   }
 }
+
+export default FsLayer;

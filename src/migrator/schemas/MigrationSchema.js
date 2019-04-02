@@ -1,9 +1,7 @@
 import mongoose from 'mongoose';
+import { STATE_UP, STATE_DOWN } from '../constants';
 
-const STATE_UP = 'up';
-const STATE_DOWN = 'down';
-
-const Schema = new mongoose.Schema({
+export const MigrationSchema = new mongoose.Schema({
   name: String,
   createdAt: { type: Date, default: Date.now },
   state: {
@@ -12,7 +10,3 @@ const Schema = new mongoose.Schema({
     default: STATE_DOWN
   }
 });
-
-const Status = { STATE_UP, STATE_DOWN };
-
-export { Schema, Status };
