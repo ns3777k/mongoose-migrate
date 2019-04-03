@@ -23,7 +23,7 @@ class DatabaseStorage {
   }
 
   findMigration(name) {
-    return this.client.models.Migration.findOne();
+    return this.client.models.Migration.findOne({ name });
   }
 
   getMigrations(options = {}) {

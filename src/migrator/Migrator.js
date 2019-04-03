@@ -9,11 +9,38 @@ class Migrator {
     this.databaseStorage = databaseStorage;
   }
 
-  createMigration(name) {
-    // TODO: check existent
-    const migrationName = this.fileStorage.createMigration(name);
-    this.databaseStorage.createMigration(migrationName);
+  async createMigration(name) {
+    const migrationName = this.fileStorage.makeName(name);
+    const found = await this.databaseStorage.findMigration(migrationName);
+    if (found) {
+      throw Error(`Migration ${migrationName} already exists!`);
+    }
+
+    this.fileStorage.createMigration(migrationName);
+    await this.databaseStorage.createMigration(migrationName);
 
     return migrationName;
   }
+
+  getMigrations(options) {
+    return this.databaseStorage.getMigrations(options);
+  }
+
+  applyMigration(migration) {
+    return this.databaseStorage.applyMigration(migration);
+  }
+
+  locateMigration(name) {
+    return this.fileStorage.locateMigration(name);
+  }
+
+  setup() {
+    return this.databaseStorage.connect();
+  }
+
+  teardown() {
+    return this.databaseStorage.disconnect();
+  }
 }
+
+export default Migrator;

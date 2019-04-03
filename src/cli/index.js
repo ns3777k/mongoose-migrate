@@ -1,15 +1,23 @@
-// TODO: migration already exists error info.
 import yargs from 'yargs';
 import { version } from '../../package.json';
 import { checkDsn, checkMigrationDirectory } from './option-checkers';
 import { Migrator, DatabaseStorage, FileStorage } from '../migrator';
 import ui from './ui';
 
-function createMigrator(dsn, migrationsPath) {
-  return new Migrator(
-    new FileStorage(migrationsPath),
-    new DatabaseStorage(dsn)
+async function migratorWrap(argv, wrapFn) {
+  const migrator = new Migrator(
+    new FileStorage(argv.migrationsPath),
+    new DatabaseStorage(argv.dsn)
   );
+
+  try {
+    await migrator.setup();
+    await wrapFn(migrator);
+  } catch (e) {
+    ui.error(e);
+  }
+
+  await migrator.teardown();
 }
 
 yargs
@@ -38,6 +46,16 @@ yargs
   .command({
     command: 'create <name>',
     describe: 'create migration',
+    handler: argv => {
+      migratorWrap(argv, async migrator => {
+        const migrationName = await migrator.createMigration(argv.name);
+        ui.info(`Migration created: ${migrationName}`);
+      });
+    }
+  })
+  .command({
+    command: 'list',
+    describe: 'list migrations',
     builder(yargs) {
       return yargs.option('pending', {
         alias: 'p',
@@ -46,55 +64,46 @@ yargs
       });
     },
     handler: argv => {
-      const migrator = createMigrator(argv.dsn, argv.migrationsPath);
+      migratorWrap(argv, async migrator => {
+        const options = { pending: argv.pending };
+        const migrations = await migrator.getMigrations(options);
 
-      try {
-        const migrationName = migrator.createMigration(argv.name);
-        ui.info(`Migration created: ${migrationName}`);
-      } catch (e) {
-        ui.error(`Error while creating migration ${argv.name}: ${e}`);
-      }
+        ui.printMigrationTable(migrations);
+      });
+    }
+  })
+  .command({
+    command: 'up',
+    describe: 'apply migrations',
+    builder(yargs) {
+      return yargs.option('migrations', {
+        type: 'array',
+        describe: 'migrations to apply'
+      });
+    },
+    handler: argv => {
+      migratorWrap(argv, async migrator => {
+        const options = { pending: true };
+        const migrations = argv.migrations || [];
+
+        if (migrations.length > 0) {
+          options.migrations = migrations;
+        }
+
+        const downMigrations = await migrator.getMigrations(options);
+        for (let migration of downMigrations) {
+          ui.info(`Applying migration ${migration.name}...`);
+          const f = migrator.locateMigration(migration.name);
+          const m = require(f);
+          await m.up(migrator.databaseStorage.client);
+          await migrator.applyMigration(migration);
+        }
+      });
     }
   });
 
 yargs.argv;
 
-// p.command('list')
-//   .description('list all migrations')
-//   .option('-p, --pending')
-//   .action(async cmd => {
-//     const options = {};
-//     const dbLayer = new DbLayer(p.dsn);
-//     await dbLayer.connect();
-//
-//     if (cmd.pending) {
-//       options.pending = true;
-//     }
-//
-//     const migrations = await dbLayer.getMigrations(options);
-//     ui.printMigrationTable(migrations);
-//
-//     await dbLayer.disconnect();
-//   });
-//
-// p.command('create <name>')
-//   .description('creates new migration')
-//   .action(async name => {
-//     const fsLayer = new FsLayer(p.migrations);
-//     const migrationName = fsLayer.createMigration(name);
-//     const dbLayer = new DbLayer(p.dsn);
-//
-//     await dbLayer.connect();
-//     try {
-//       await dbLayer.createMigration(migrationName);
-//       ui.info(`Migration created: ${migrationName}`);
-//     } catch (e) {
-//       ui.error(`Error while creating migration ${migrationName}: ${e}`);
-//       process.exit(1);
-//     }
-//     await dbLayer.disconnect();
-//   });
-//
 // p.command('up [migrations...]')
 //   .description('apply migrations')
 //   .action(async chosenMigrations => {
@@ -119,4 +128,3 @@ yargs.argv;
 //     await dbLayer.disconnect();
 //   });
 //
-// p.parse(process.argv);

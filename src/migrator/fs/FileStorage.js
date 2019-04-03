@@ -19,15 +19,15 @@ module.exports = { up, down };
   }
 
   createMigration(name) {
-    const migrationName = `${Date.now()}-${name}`;
-    const migrationFileName = `${migrationName}.js`;
-
+    const migrationFileName = `${name}.js`;
     const fullPath = resolve(this.directory, migrationFileName);
     const template = this.template.replace('{{ name }}', migrationFileName);
 
     writeFileSync(fullPath, template);
+  }
 
-    return migrationName;
+  makeName(name) {
+    return `${Date.now()}-${name}`;
   }
 
   locateMigration(name) {
