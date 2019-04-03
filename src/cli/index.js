@@ -1,11 +1,16 @@
 // TODO: migration already exists error info.
-// TODO: auto create migration directory
 import yargs from 'yargs';
 import { version } from '../../package.json';
-import { validateDsn, validateMigrationDirectory } from './validation';
-// import FsLayer from '../migrator/FsLayer';
-// import DbLayer from '../migrator/DbLayer';
-// import ui from './ui';
+import { checkDsn, checkMigrationDirectory } from './option-checkers';
+import { Migrator, DatabaseStorage, FileStorage } from '../migrator';
+import ui from './ui';
+
+function createMigrator(dsn, migrationsPath) {
+  return new Migrator(
+    new FileStorage(migrationsPath),
+    new DatabaseStorage(dsn)
+  );
+}
 
 yargs
   .scriptName('mongoose-migrate')
@@ -16,7 +21,7 @@ yargs
     nargs: 1,
     describe: 'MongoDB dsn'
   })
-  .option('migrations', {
+  .option('migrationsPath', {
     alias: 'm',
     demandOption: true,
     nargs: 1,
@@ -25,14 +30,14 @@ yargs
     default: './migrations'
   })
   .check(argv => {
-    validateDsn(argv.dsn);
-    validateMigrationDirectory(argv.migrations);
+    checkDsn(argv.dsn);
+    checkMigrationDirectory(argv.migrationsPath);
 
     return true;
   })
   .command({
-    command: 'list',
-    describe: 'list all migrations',
+    command: 'create <name>',
+    describe: 'create migration',
     builder(yargs) {
       return yargs.option('pending', {
         alias: 'p',
@@ -41,10 +46,18 @@ yargs
       });
     },
     handler: argv => {
-      console.log(argv);
+      const migrator = createMigrator(argv.dsn, argv.migrationsPath);
+
+      try {
+        const migrationName = migrator.createMigration(argv.name);
+        ui.info(`Migration created: ${migrationName}`);
+      } catch (e) {
+        ui.error(`Error while creating migration ${argv.name}: ${e}`);
+      }
     }
-  })
-  .argv;
+  });
+
+yargs.argv;
 
 // p.command('list')
 //   .description('list all migrations')

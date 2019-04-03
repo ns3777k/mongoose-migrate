@@ -27,6 +27,7 @@ function printMigrationTable(migrations) {
 
 function error(msg) {
   console.log(chalk.red.bold(msg));
+  process.exit(1);
 }
 
 function info(msg) {

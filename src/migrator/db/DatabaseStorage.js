@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { MigrationSchema } from './schemas/MigrationSchema';
-import { STATE_DOWN, STATE_UP } from './index';
+import { STATE_DOWN, STATE_UP } from '../constants';
 
-export default class DbLayer {
+class DatabaseStorage {
   constructor(dsn) {
     this.dsn = dsn;
     this.schemas = [
@@ -20,6 +20,10 @@ export default class DbLayer {
   createMigration(name) {
     const migration = new this.client.models.Migration({ name });
     return migration.save();
+  }
+
+  findMigration(name) {
+    return this.client.models.Migration.findOne();
   }
 
   getMigrations(options = {}) {
@@ -46,3 +50,5 @@ export default class DbLayer {
     return this.client.disconnect();
   }
 }
+
+export default DatabaseStorage;

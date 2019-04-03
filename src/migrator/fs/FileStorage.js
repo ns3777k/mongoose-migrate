@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 
-class FsLayer {
+class FileStorage {
   constructor(directory) {
     this.directory = directory;
     this.template = `// Migration: {{ name }}
@@ -35,4 +35,4 @@ module.exports = { up, down };
   }
 }
 
-export default FsLayer;
+export default FileStorage;

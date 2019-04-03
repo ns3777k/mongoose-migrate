@@ -1,7 +1,10 @@
 import { parse } from 'url';
 import { statSync } from 'fs';
 
-export function validateDsn(dsn) {
+/**
+ * @param {String} dsn
+ */
+export function checkDsn(dsn) {
   const p = parse(dsn);
 
   if (p.protocol !== 'mongodb:') {
@@ -9,7 +12,10 @@ export function validateDsn(dsn) {
   }
 }
 
-export function validateMigrationDirectory(migrationsPath) {
+/**
+ * @param {String} migrationsPath
+ */
+export function checkMigrationDirectory(migrationsPath) {
   let stats;
 
   try {

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { STATE_UP, STATE_DOWN } from '../constants';
+import { STATE_UP, STATE_DOWN } from '../../constants';
 
 export const MigrationSchema = new mongoose.Schema({
   name: String,
