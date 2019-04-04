@@ -29,9 +29,7 @@ module.exports = { up, down };
   createMigration(name) {
     const migrationFileName = `${name}.js`;
     const fullPath = resolve(this.directory, migrationFileName);
-    const contents = this.prepareTemplate([
-      ['{{ name }}', migrationFileName]
-    ]);
+    const contents = this.prepareTemplate([['{{ name }}', migrationFileName]]);
 
     writeFileSync(fullPath, contents);
   }
