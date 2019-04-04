@@ -2,11 +2,13 @@
 
 ## Development
 
+Clone project:
+
 ```bash
-$ git clone 
+$ git clone git@github.com:ns3777k/mongoose-migrate.git
 ```
 
-To start a local mongodb server docker is the 
+Start local mongodb:
  
 ```bash
 $ docker run --rm -p27017:27017 mongo
