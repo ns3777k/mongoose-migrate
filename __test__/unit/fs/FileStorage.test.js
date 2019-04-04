@@ -27,7 +27,9 @@ describe('FileStorage', () => {
       .toHaveBeenNthCalledWith(
         1,
         '/testing/directory/testing-migration.js',
-        storage.prepareTemplate(['{{ name }}', 'testing-migration.js'])
+        storage.prepareTemplate([
+          ['{{ name }}', 'testing-migration.js']
+        ])
       );
     spy.mockRestore();
   });

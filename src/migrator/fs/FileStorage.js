@@ -39,7 +39,7 @@ module.exports = { up, down };
   /**
    * Replaces placeholders with provided values.
    *
-   * @param {Array<Array<String, String>>} replacePairs
+   * @param {Array<String[]>} replacePairs
    * @returns {String}
    */
   prepareTemplate(replacePairs = []) {
