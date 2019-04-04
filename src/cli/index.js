@@ -106,6 +106,5 @@ yargs
         }
       });
     }
-  });
-
-yargs.argv;
+  })
+  .argv;
