@@ -2,6 +2,8 @@ import { parse } from 'url';
 import { statSync } from 'fs';
 
 /**
+ * Validates dsn has mongodb protocol.
+ *
  * @param {String} dsn
  */
 export function checkDsn(dsn) {
@@ -13,6 +15,8 @@ export function checkDsn(dsn) {
 }
 
 /**
+ * Validates migrationsPath is a directory and it exists.
+ *
  * @param {String} migrationsPath
  */
 export function checkMigrationDirectory(migrationsPath) {

@@ -21,9 +21,19 @@ module.exports = { up, down };
   createMigration(name) {
     const migrationFileName = `${name}.js`;
     const fullPath = resolve(this.directory, migrationFileName);
-    const template = this.template.replace('{{ name }}', migrationFileName);
+    const contents = this.prepareTemplate(['{{ name }}', migrationFileName]);
 
-    writeFileSync(fullPath, template);
+    writeFileSync(fullPath, contents);
+  }
+
+  prepareTemplate(replacePairs = []) {
+    let contents = this.template;
+
+    replacePairs.forEach(pair => {
+      contents = contents.replace(pair[0], pair[1]);
+    });
+
+    return contents;
   }
 
   makeName(name) {

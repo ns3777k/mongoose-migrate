@@ -17,7 +17,7 @@ $ docker run --rm -p27017:27017 mongo
 To run javascript use `babel-node`: 
 
 ```bash
-$ ./node_modules/.bin/babel-node src/cli.js
+$ babel-node src/cli.js --dsn mongodb://127.0.0.1:27017/mongoose-migration create testing-migration
 ```
 
 ## Building

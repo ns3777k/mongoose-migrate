@@ -5,9 +5,7 @@ import { STATE_DOWN, STATE_UP } from '../constants';
 class DatabaseStorage {
   constructor(dsn) {
     this.dsn = dsn;
-    this.schemas = [
-      { name: 'Migration', schema: MigrationSchema }
-    ];
+    this.schemas = [{ name: 'Migration', schema: MigrationSchema }];
   }
 
   async connect() {
