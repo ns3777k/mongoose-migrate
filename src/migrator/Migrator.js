@@ -26,8 +26,18 @@ class Migrator {
     return this.databaseStorage.getMigrations(options);
   }
 
-  applyMigration(migration) {
+  async applyMigration(migration) {
+    const file = this.locateMigration(migration.name);
+    await require(file).up(this.databaseStorage.getClient());
+
     return this.databaseStorage.applyMigration(migration);
+  }
+
+  async rollbackMigration(migration) {
+    const file = this.locateMigration(migration.name);
+    await require(file).down(this.databaseStorage.getClient());
+
+    return this.databaseStorage.rollbackMigration(migration);
   }
 
   locateMigration(name) {

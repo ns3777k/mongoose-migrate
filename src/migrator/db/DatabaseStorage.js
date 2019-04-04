@@ -17,6 +17,10 @@ class DatabaseStorage {
     });
   }
 
+  getClient() {
+    return this.client;
+  }
+
   createMigration(name) {
     const migration = new this.client.models.Migration({ name });
     return migration.save();
@@ -28,21 +32,32 @@ class DatabaseStorage {
 
   getMigrations(options = {}) {
     const filter = {};
+    const sorting = { createdAt: -1 };
     const model = this.client.models.Migration;
 
-    if (options.pending) {
-      filter.state = STATE_DOWN;
+    if ('pending' in options) {
+      if (options.pending) {
+        filter.state = STATE_DOWN;
+      } else {
+        filter.state = STATE_UP;
+        sorting.createdAt = 1;
+      }
     }
 
     if (Array.isArray(options.migrations) && options.migrations.length > 0) {
       filter.name = { $in: options.migrations };
     }
 
-    return model.find(filter).sort({ createdAt: -1 });
+    return model.find(filter).sort(sorting);
   }
 
   applyMigration(migration) {
     migration.state = STATE_UP;
+    return migration.save();
+  }
+
+  rollbackMigration(migration) {
+    migration.state = STATE_DOWN;
     return migration.save();
   }
 
