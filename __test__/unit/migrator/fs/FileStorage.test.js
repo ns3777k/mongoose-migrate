@@ -1,4 +1,4 @@
-import FileStorage from '../../../src/migrator/fs/FileStorage';
+import FileStorage from '../../../../src/migrator/fs/FileStorage';
 
 jest.mock('fs');
 
