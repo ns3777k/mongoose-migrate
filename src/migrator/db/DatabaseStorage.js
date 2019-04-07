@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import { MigrationSchema } from './schemas/MigrationSchema';
-import { STATE_DOWN, STATE_UP } from '../constants';
 
 class DatabaseStorage {
   /**
@@ -37,62 +36,40 @@ class DatabaseStorage {
   }
 
   /**
-   * Queries migration by name.
-   *
-   * @param {String} name
-   * @returns {Promise}
-   */
-  findMigration(name) {
-    return this.client.models.Migration.findOne({ name });
-  }
-
-  /**
    * Queries migration records.
    *
-   * @param {Object} options
    * @returns {Promise}
    */
-  getMigrations(options = {}) {
-    const filter = {};
-    const sorting = { createdAt: -1 };
+  getAppliedMigrations() {
     const model = this.client.models.Migration;
-
-    if ('pending' in options) {
-      if (options.pending) {
-        filter.state = STATE_DOWN;
-      } else {
-        filter.state = STATE_UP;
-        sorting.createdAt = 1;
-      }
-    }
-
-    if (Array.isArray(options.migrations) && options.migrations.length > 0) {
-      filter.name = { $in: options.migrations };
-    }
-
-    return model.find(filter).sort(sorting);
+    return model.find().sort({ createdAt: -1 });
   }
 
   /**
    * Updates migration status to UP.
    *
-   * @param {Object} migration
+   * @param {String} migrationName
    * @returns {Promise}
    */
-  applyMigration(migration) {
-    migration.state = STATE_UP;
+  applyMigration(migrationName) {
+    const model = this.client.models.Migration;
+    const migration = new model({
+      name: migrationName,
+      createdAt: Date.now()
+    });
+
     return migration.save();
   }
 
   /**
    * Updates migration status to DOWN.
    *
-   * @param {Object} migration
+   * @param {String} migrationName
    * @returns {Promise}
    */
-  rollbackMigration(migration) {
-    migration.state = STATE_DOWN;
-    return migration.save();
+  rollbackMigration(migrationName) {
+    const model = this.client.models.Migration;
+    return model.deleteOne({ name: migrationName });
   }
 
   /**

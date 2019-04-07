@@ -15,6 +15,7 @@ async function migratorWrap(argv, wrapFn) {
     await wrapFn(migrator);
   } catch (e) {
     ui.error(e);
+    process.exit(1);
   }
 
   await migrator.teardown();
@@ -48,7 +49,7 @@ yargs
     describe: 'create migration',
     handler: argv => {
       migratorWrap(argv, async migrator => {
-        const migrationName = await migrator.createMigration(argv.name);
+        const migrationName = migrator.createMigration(argv.name);
         ui.info(`Migration created: ${migrationName}`);
       });
     }
@@ -57,18 +58,27 @@ yargs
     command: 'list',
     describe: 'list migrations',
     builder(yargs) {
-      return yargs.option('pending', {
-        alias: 'p',
+      return yargs.option('all', {
+        alias: 'a',
         type: 'boolean',
-        describe: 'Only pending migrations'
+        describe: 'Show all migrations (only pending by default)'
       });
     },
     handler: argv => {
       migratorWrap(argv, async migrator => {
-        const options = 'pending' in argv ? { pending: true } : {};
-        const migrations = await migrator.getMigrations(options);
+        const migrations = await migrator.getMigrations();
+        const showAll = argv.all;
 
-        ui.printMigrationTable(migrations);
+        if (!showAll && migrations.pending.length === 0) {
+          ui.error('No pending migrations');
+          return;
+        }
+
+        ui.printPendingTable('Pending migrations', migrations.pending);
+
+        if (argv.all) {
+          ui.printMigratedTable('\nApplied migrations', migrations.applied);
+        }
       });
     }
   })
@@ -77,16 +87,14 @@ yargs
     describe: 'apply migrations',
     handler: argv => {
       migratorWrap(argv, async migrator => {
-        const options = { pending: true };
-        const migrations = argv.migrations || [];
+        const migrations = await migrator.getMigrations();
+        const toApply =
+          (argv.migrations || []).length > 0
+            ? migrations.pending.filter(m => argv.migrations.includes(m))
+            : migrations.pending;
 
-        if (migrations.length > 0) {
-          options.migrations = migrations;
-        }
-
-        const downMigrations = await migrator.getMigrations(options);
-        for (let migration of downMigrations) {
-          ui.info(`Applying migration ${migration.name}...`);
+        for (let migration of toApply) {
+          ui.info(`Applying migration ${migration}...`);
           await migrator.applyMigration(migration);
         }
       });
@@ -97,14 +105,15 @@ yargs
     describe: 'rollback migrations',
     handler: argv => {
       migratorWrap(argv, async migrator => {
-        const options = { pending: false, migrations: argv.migrations };
-        const upMigrations = await migrator.getMigrations(options);
+        const migrations = await migrator.getMigrations();
+        const toRollback = migrations.applied.filter(m =>
+          argv.migrations.includes(m)
+        );
 
-        for (let migration of upMigrations) {
-          ui.info(`Rolling back migration ${migration.name}...`);
+        for (let migration of toRollback) {
+          ui.info(`Rolling back migration ${migration}...`);
           await migrator.rollbackMigration(migration);
         }
       });
     }
-  })
-  .argv;
+  }).argv;

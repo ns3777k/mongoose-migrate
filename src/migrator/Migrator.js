@@ -13,55 +13,70 @@ class Migrator {
    * Creates new migration on file system and inside database.
    *
    * @param {String} name
-   * @returns {Promise<String>}
+   * @returns {String}
    */
-  async createMigration(name) {
+  createMigration(name) {
     const migrationName = this.fileStorage.makeName(name);
-    const found = await this.databaseStorage.findMigration(migrationName);
-    if (found) {
-      throw Error(`Migration ${migrationName} already exists!`);
-    }
-
     this.fileStorage.createMigration(migrationName);
-    await this.databaseStorage.createMigration(migrationName);
 
     return migrationName;
   }
 
   /**
-   * Proxies migrations query to underlying database storage.
-   *
-   * @param {Object} options
    * @returns {Promise}
    */
-  getMigrations(options) {
-    return this.databaseStorage.getMigrations(options);
+  async getMigrations() {
+    const all = this.fileStorage.findMigrations();
+    const applied = (await this.databaseStorage.getAppliedMigrations()).map(
+      migration => migration.name
+    );
+    const pending = all.filter(m => !applied.includes(m));
+
+    return {
+      applied,
+      pending
+    };
   }
 
   /**
    * Executes migration file and updates the status in database.
    *
-   * @param {Object} migration
+   * @param {String} migrationName
    * @returns {Promise}
    */
-  async applyMigration(migration) {
-    const file = this.locateMigration(migration.name);
-    await require(file).up(this.databaseStorage.getClient());
+  async applyMigration(migrationName) {
+    const file = this.locateMigration(migrationName);
+    // await require(file).up(this.databaseStorage.getClient());
 
-    return this.databaseStorage.applyMigration(migration);
+    console.log(file);
+    console.log(__non_webpack_require__);
+    const m = __non_webpack_require__(file);
+    await m.up(this.databaseStorage.getClient());
+
+    // try {
+    //   const m = await import(/* webpackIgnore: true */ file);
+    //   await m.up(this.databaseStorage.getClient());
+    // } catch (e) {
+    //   console.log(e);
+    //   console.log(e.stack);
+    // }
+
+    process.exit(1);
+
+    // return this.databaseStorage.applyMigration(migrationName);
   }
 
   /**
    * Executes migration file and updates the status in database.
    *
-   * @param {Object} migration
+   * @param {String} migrationName
    * @returns {Promise}
    */
-  async rollbackMigration(migration) {
-    const file = this.locateMigration(migration.name);
+  async rollbackMigration(migrationName) {
+    const file = this.locateMigration(migrationName);
     await require(file).down(this.databaseStorage.getClient());
 
-    return this.databaseStorage.rollbackMigration(migration);
+    return this.databaseStorage.rollbackMigration(migrationName);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { writeFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 
 class FileStorage {
@@ -32,6 +32,23 @@ module.exports = { up, down };
     const contents = this.prepareTemplate([['{{ name }}', migrationFileName]]);
 
     writeFileSync(fullPath, contents);
+  }
+
+  /**
+   * Finds all file migrations.
+   *
+   * @returns {string[]}
+   */
+  findMigrations() {
+    return readdirSync(this.directory, { withFileTypes: true })
+      .filter(file => !file.isDirectory() && file.name.endsWith('.js'))
+      .map(file => file.name.replace('.js', ''))
+      .sort((a, b) => {
+        const ats = Number(a.split('-')[0]);
+        const bts = Number(b.split('-')[0]);
+
+        return bts - ats;
+      });
   }
 
   /**

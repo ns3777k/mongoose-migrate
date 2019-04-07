@@ -1,31 +1,29 @@
-import Table from 'cli-table';
 import chalk from 'chalk';
-import { STATE_DOWN } from '../migrator/index';
 
-function formatMigrationState(state) {
-  return state === STATE_DOWN ? chalk.red.bold(state) : chalk.green.bold(state);
+function printTable(migrations, colorFn) {
+  migrations.forEach((m, i) => console.log(colorFn(`${++i}. ${m}`)));
 }
 
-function printMigrationTable(migrations) {
-  const table = new Table({
-    head: ['Name', 'State', 'Created'],
-    colWidths: [40, 8, 30]
-  });
+function printPendingTable(title, migrations) {
+  if (migrations.length === 0) {
+    return;
+  }
 
-  migrations.forEach(migration => {
-    table.push([
-      migration.name,
-      formatMigrationState(migration.state),
-      migration.createdAt.toLocaleString()
-    ]);
-  });
+  error(`${title}:\n`);
+  printTable(migrations, chalk.red.bold);
+}
 
-  console.log(table.toString());
+function printMigratedTable(title, migrations) {
+  if (migrations.length === 0) {
+    return;
+  }
+
+  info(`${title}:\n`);
+  printTable(migrations, chalk.green.bold);
 }
 
 function error(msg) {
   console.log(chalk.red.bold(msg));
-  process.exit(1);
 }
 
 function info(msg) {
@@ -33,7 +31,8 @@ function info(msg) {
 }
 
 export default {
-  printMigrationTable,
+  printPendingTable,
+  printMigratedTable,
   error,
   info
 };
