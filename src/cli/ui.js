@@ -30,9 +30,14 @@ function info(msg) {
   console.log(chalk.green.bold(msg));
 }
 
+function warn(msg) {
+  console.log(chalk.yellow.bold(msg));
+}
+
 export default {
   printPendingTable,
   printMigratedTable,
   error,
-  info
+  info,
+  warn
 };

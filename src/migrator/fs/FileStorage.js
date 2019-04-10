@@ -41,13 +41,13 @@ module.exports = { up, down };
    */
   findMigrations() {
     return readdirSync(this.directory, { withFileTypes: true })
-      .filter(file => !file.isDirectory() && file.name.endsWith('.js'))
+      .filter(file => !file.isDirectory() && file.name.endsWith('.js') && file.name.match(/^(\d+)\-(.*)/))
       .map(file => file.name.replace('.js', ''))
       .sort((a, b) => {
         const ats = Number(a.split('-')[0]);
         const bts = Number(b.split('-')[0]);
 
-        return bts - ats;
+        return ats - bts;
       });
   }
 

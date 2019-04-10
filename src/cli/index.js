@@ -1,3 +1,5 @@
+import '@babel/polyfill';
+import '@babel/register';
 import yargs from 'yargs';
 import { version } from '../../package.json';
 import { checkDsn, checkMigrationDirectory } from './option-checkers';
@@ -14,7 +16,7 @@ async function migratorWrap(argv, wrapFn) {
     await migrator.setup();
     await wrapFn(migrator);
   } catch (e) {
-    ui.error(e);
+    ui.error(e.stack);
     process.exit(1);
   }
 
@@ -70,7 +72,7 @@ yargs
         const showAll = argv.all;
 
         if (!showAll && migrations.pending.length === 0) {
-          ui.error('No pending migrations');
+          ui.warn('No pending migrations');
           return;
         }
 

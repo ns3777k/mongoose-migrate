@@ -2,12 +2,10 @@ const path = require('path');
 
 module.exports = {
   entry: [
-    'babel-polyfill',
-    '@babel/register',
     path.resolve(__dirname, 'src', 'cli', 'index.js')
   ],
 
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
   target: 'node',
 
   module: {
@@ -18,7 +16,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
+            cacheDirectory: true,
+            presets: ['@babel/env']
           }
         }
       }
@@ -33,7 +32,7 @@ module.exports = {
   resolve: {
     modules: [
       path.resolve(__dirname, 'src'),
-      'node_modules'
+      path.resolve(__dirname, 'node_modules')
     ]
   }
 };

@@ -46,24 +46,10 @@ class Migrator {
    */
   async applyMigration(migrationName) {
     const file = this.locateMigration(migrationName);
-    // await require(file).up(this.databaseStorage.getClient());
-
-    console.log(file);
-    console.log(__non_webpack_require__);
     const m = __non_webpack_require__(file);
     await m.up(this.databaseStorage.getClient());
 
-    // try {
-    //   const m = await import(/* webpackIgnore: true */ file);
-    //   await m.up(this.databaseStorage.getClient());
-    // } catch (e) {
-    //   console.log(e);
-    //   console.log(e.stack);
-    // }
-
-    process.exit(1);
-
-    // return this.databaseStorage.applyMigration(migrationName);
+    return this.databaseStorage.applyMigration(migrationName);
   }
 
   /**
@@ -74,7 +60,8 @@ class Migrator {
    */
   async rollbackMigration(migrationName) {
     const file = this.locateMigration(migrationName);
-    await require(file).down(this.databaseStorage.getClient());
+    const m = __non_webpack_require__(file);
+    await m.down(this.databaseStorage.getClient());
 
     return this.databaseStorage.rollbackMigration(migrationName);
   }
