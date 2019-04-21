@@ -6,13 +6,10 @@ node_js:
 services:
   - docker
 
-before_script:
-  - npm run setup
-
 script:
   - npm test
   - npm run build
-  - docker build -t mongoose-migrate:$TRAVIS_TAG .
+  - docker build -t mongoose-migrate .
 
 deploy:
   - provider: npm
@@ -23,6 +20,6 @@ deploy:
       tags: true
 
   - provider: script
-    script: bash ci/docker_push
+    script: bash ci/docker_push.sh
     on:
       tags: true
