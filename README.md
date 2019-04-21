@@ -1,7 +1,7 @@
 # mongoose-migrate
 
 [![Build Status](https://travis-ci.org/ns3777k/mongoose-migrate.svg?branch=master)](https://travis-ci.org/ns3777k/mongoose-migrate)
-
+[![npm (scoped)](https://img.shields.io/npm/v/@ns3777k/mongoose-migrate.svg)](https://www.npmjs.com/package/@ns3777k/mongoose-migrate)
 
 A dead simple mongoose migrations tool for mongoose 5.
 
