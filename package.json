@@ -27,6 +27,9 @@
     "webpack-cli": "^3.3.0",
     "yargs": "^13.2.2"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "jest": {
     "testEnvironment": "node",
     "coverageDirectory": "./coverage/"

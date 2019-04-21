@@ -27,7 +27,7 @@ You can use pre-built image to run migrations:
 ```bash
 $ docker run --rm \
     -v /my/project/path:/project \
-    ns3777k/mongoose-migrator \
+    ns3777k/mongoose-migrate \
     --dsn mongodb://... \
     -m /project/src/migrations up
 ``` 
