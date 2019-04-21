@@ -15,4 +15,4 @@ deploy:
   - provider: script
     script: bash ci/docker_push.sh
     on:
-      tags: true
+      all_branches: true
