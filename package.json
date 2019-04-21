@@ -27,6 +27,9 @@
     "webpack-cli": "^3.3.0",
     "yargs": "^13.2.2"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "jest": {
     "testEnvironment": "node",
     "coverageDirectory": "./coverage/"
@@ -39,7 +42,7 @@
     "lint:prettier:check": "prettier --list-different \"{src,test}/**/*.js\"",
     "lint:prettier:write": "prettier --write \"{src,test}/**/*.js\"",
     "build": "webpack && chmod +x dist/main.js",
-    "test": "jest && npm run lint",
+    "test": "jest --ci && npm run lint",
     "test:coverage": "npm test -- --coverage"
   },
   "author": "Nikita Safonov <ns3777k@gmail.com>",

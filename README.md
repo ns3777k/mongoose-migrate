@@ -1,5 +1,8 @@
 # mongoose-migrate
 
+[![Build Status](https://travis-ci.org/ns3777k/mongoose-migrate.svg?branch=master)](https://travis-ci.org/ns3777k/mongoose-migrate)
+
+
 A dead simple mongoose migrations tool for mongoose 5.
 
 ```bash
@@ -27,7 +30,7 @@ You can use pre-built image to run migrations:
 ```bash
 $ docker run --rm \
     -v /my/project/path:/project \
-    ns3777k/mongoose-migrator \
+    ns3777k/mongoose-migrate \
     --dsn mongodb://... \
     -m /project/src/migrations up
 ``` 
