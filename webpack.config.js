@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: [
+    '@babel/polyfill',
     path.resolve(__dirname, 'src', 'cli', 'index.js')
   ],
 
@@ -17,7 +18,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
-            presets: ['@babel/env']
+            presets: ['@babel/preset-env']
           }
         }
       }

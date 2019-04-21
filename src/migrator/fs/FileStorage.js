@@ -9,15 +9,13 @@ class FileStorage {
     this.directory = directory;
     this.template = `// Migration: {{ name }}
 
-async function up(mongoose) {
+export async function up(mongoose) {
   // write your migration here
 }
 
-async function down(mongoose) {
+export async function down(mongoose) {
   // write your migration here
 }
-
-module.exports = { up, down };
 `;
   }
 
@@ -41,7 +39,12 @@ module.exports = { up, down };
    */
   findMigrations() {
     return readdirSync(this.directory, { withFileTypes: true })
-      .filter(file => !file.isDirectory() && file.name.endsWith('.js') && file.name.match(/^(\d+)\-(.*)/))
+      .filter(
+        file =>
+          !file.isDirectory() &&
+          file.name.endsWith('.js') &&
+          file.name.match(/^(\d+)\-(.*)/)
+      )
       .map(file => file.name.replace('.js', ''))
       .sort((a, b) => {
         const ats = Number(a.split('-')[0]);

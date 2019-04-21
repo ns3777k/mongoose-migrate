@@ -1,3 +1,6 @@
+import presetEnv from '@babel/preset-env';
+import transformRuntime from '@babel/plugin-transform-runtime';
+
 class Migrator {
   /**
    *
@@ -45,6 +48,12 @@ class Migrator {
    * @returns {Promise}
    */
   async applyMigration(migrationName) {
+    require('@babel/register')({
+      ignore: [/node_modules/],
+      presets: [presetEnv],
+      plugins: [transformRuntime]
+    });
+
     const file = this.locateMigration(migrationName);
     const m = __non_webpack_require__(file);
     await m.up(this.databaseStorage.getClient());
@@ -59,6 +68,12 @@ class Migrator {
    * @returns {Promise}
    */
   async rollbackMigration(migrationName) {
+    require('@babel/register')({
+      ignore: [/node_modules/],
+      presets: [presetEnv],
+      plugins: [transformRuntime]
+    });
+
     const file = this.locateMigration(migrationName);
     const m = __non_webpack_require__(file);
     await m.down(this.databaseStorage.getClient());

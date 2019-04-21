@@ -1,5 +1,3 @@
-import '@babel/polyfill';
-import '@babel/register';
 import yargs from 'yargs';
 import { version } from '../../package.json';
 import { checkDsn, checkMigrationDirectory } from './option-checkers';
