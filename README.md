@@ -1,5 +1,8 @@
 # mongoose-migrate
 
+[![Build Status](https://travis-ci.org/ns3777k/mongoose-migrate.svg?branch=master)](https://travis-ci.org/ns3777k/mongoose-migrate)
+
+
 A dead simple mongoose migrations tool for mongoose 5.
 
 ```bash

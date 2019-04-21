@@ -2,8 +2,7 @@
 
 PROJECT="mongoose-migrate"
 IMAGE="ns3777k/${PROJECT}"
-TAG="${TRAVIS_BRANCH}"
-#TAG="${TRAVIS_TAG}"
+TAG="${TRAVIS_TAG}"
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
