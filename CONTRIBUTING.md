@@ -22,4 +22,17 @@ $ babel-node src/cli.js --dsn mongodb://127.0.0.1:27017/mongoose-migration creat
 
 ## Building
 
+[Webpack](https://webpack.js.org/) is used to build this project to a single script using:
+
+```bash
+$ npm run build
+```
+
 ## Testing and Linting
+
+[Prettier](https://prettier.io/) and [eslint](https://eslint.org/) are used to check code style and errors.
+[Jest](https://jestjs.io/) is used as a testing framework.
+
+```bash
+$ npm test
+```

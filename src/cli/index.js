@@ -1,8 +1,18 @@
+import '@babel/polyfill';
 import yargs from 'yargs';
 import { version } from '../../package.json';
 import { checkDsn, checkMigrationDirectory } from './option-checkers';
 import { Migrator, DatabaseStorage, FileStorage } from '../migrator';
 import ui from './ui';
+import presetEnv from '@babel/preset-env';
+import babelRegister from '@babel/register';
+
+babelRegister({
+  ignore: [/node_modules/],
+  babelrc: false,
+  presets: [presetEnv],
+  configFile: false
+});
 
 async function migratorWrap(argv, wrapFn) {
   const migrator = new Migrator(

@@ -1,8 +1,8 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: [
-    '@babel/polyfill',
     path.resolve(__dirname, 'src', 'cli', 'index.js')
   ],
 
@@ -15,11 +15,7 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-            presets: ['@babel/preset-env']
-          }
+          loader: 'babel-loader'
         }
       }
     ]
@@ -35,5 +31,9 @@ module.exports = {
       path.resolve(__dirname, 'src'),
       path.resolve(__dirname, 'node_modules')
     ]
-  }
+  },
+
+  plugins: [
+    new webpack.BannerPlugin({ banner: '#!/usr/bin/env node', raw: true })
+  ]
 };

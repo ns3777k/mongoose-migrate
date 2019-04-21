@@ -1,0 +1,9 @@
+/__test__
+/migrations
+/dist
+/node_modules
+/coverage
+Dockerfile
+*.md
+.idea
+*.iml

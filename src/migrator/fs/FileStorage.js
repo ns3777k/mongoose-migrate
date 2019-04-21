@@ -9,10 +9,18 @@ class FileStorage {
     this.directory = directory;
     this.template = `// Migration: {{ name }}
 
+/**
+ * @param {Mongoose} mongoose
+ * @returns {Promise}
+ */
 export async function up(mongoose) {
   // write your migration here
 }
 
+/**
+ * @param {Mongoose} mongoose
+ * @returns {Promise}
+ */
 export async function down(mongoose) {
   // write your migration here
 }
@@ -47,8 +55,8 @@ export async function down(mongoose) {
       )
       .map(file => file.name.replace('.js', ''))
       .sort((a, b) => {
-        const ats = Number(a.split('-')[0]);
-        const bts = Number(b.split('-')[0]);
+        const ats = parseInt(a.split('-')[0], 10);
+        const bts = parseInt(b.split('-')[0], 10);
 
         return ats - bts;
       });

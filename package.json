@@ -1,5 +1,5 @@
 {
-  "name": "mongoose-migrate",
+  "name": "@ns3777k/mongoose-migrate",
   "version": "1.0.0",
   "main": "./dist/main.js",
   "dependencies": {
@@ -14,7 +14,6 @@
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/node": "^7.2.2",
-    "@babel/plugin-transform-runtime": "^7.4.3",
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
@@ -36,9 +35,10 @@
     "setup": "npm ci",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint src",
+    "lint:eslint:fix": "eslint src --fix",
     "lint:prettier:check": "prettier --list-different \"{src,test}/**/*.js\"",
     "lint:prettier:write": "prettier --write \"{src,test}/**/*.js\"",
-    "build": "webpack",
+    "build": "webpack && chmod +x dist/main.js",
     "test": "jest && npm run lint",
     "test:coverage": "npm test -- --coverage"
   },
