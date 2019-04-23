@@ -32,7 +32,10 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "coverageDirectory": "./coverage/"
+    "coverageDirectory": "./coverage/",
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
   },
   "scripts": {
     "setup": "npm ci",
