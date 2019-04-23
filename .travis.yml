@@ -6,10 +6,16 @@ node_js:
 services:
   - docker
 
+before_script:
+  - npm install -g codecov
+
 script:
-  - npm test
+  - npm run test:coverage
   - npm run build
   - docker build -t mongoose-migrate .
+
+after_script:
+  - codecov
 
 deploy:
   - provider: npm
