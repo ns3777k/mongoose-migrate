@@ -34,7 +34,7 @@
     "testEnvironment": "node",
     "coverageDirectory": "./coverage/",
     "collectCoverageFrom": [
-      "src/**/*.js"
+      "<rootDir>/src/**/*.js"
     ]
   },
   "scripts": {
