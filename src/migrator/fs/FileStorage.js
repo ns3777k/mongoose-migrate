@@ -51,7 +51,7 @@ export async function down(mongoose) {
         file =>
           !file.isDirectory() &&
           file.name.endsWith('.js') &&
-          file.name.match(/^(\d+)\-(.*)/)
+          file.name.match(/^(\d+)\-(.+)/)
       )
       .map(file => file.name.replace('.js', ''))
       .sort((a, b) => {
