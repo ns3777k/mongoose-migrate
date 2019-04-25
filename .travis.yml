@@ -5,8 +5,13 @@ node_js:
 
 services:
   - docker
+  - mongodb
+
+env:
+  - "MONGODB=mongodb://127.0.0.1:27017/test"
 
 before_script:
+  - sleep 15
   - npm install -g codecov
 
 script:

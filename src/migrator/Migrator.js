@@ -77,7 +77,7 @@ class Migrator {
   }
 
   /**
-   * Prepares the storages.
+   * Prepares the storage.
    *
    * @returns {Promise}
    */
@@ -86,7 +86,7 @@ class Migrator {
   }
 
   /**
-   * Shuts down the storages.
+   * Shuts down the storage.
    *
    * @returns {Promise}
    */

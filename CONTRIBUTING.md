@@ -36,3 +36,9 @@ $ npm run build
 ```bash
 $ npm test
 ```
+
+To run integration tests, specify `MONGODB` env-variable:
+
+```bash
+$ MONGODB=mongodb://127.0.0.1:27017/test npm test
+```

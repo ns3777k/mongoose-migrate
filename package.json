@@ -40,8 +40,8 @@
   "scripts": {
     "setup": "npm ci",
     "lint": "npm run lint:eslint",
-    "lint:eslint": "eslint src",
-    "lint:eslint:fix": "eslint src --fix",
+    "lint:eslint": "eslint src __test__",
+    "lint:eslint:fix": "eslint src __test__ --fix",
     "lint:prettier:check": "prettier --list-different \"{src,test}/**/*.js\"",
     "lint:prettier:write": "prettier --write \"{src,test}/**/*.js\"",
     "build": "webpack && chmod +x dist/main.js",
