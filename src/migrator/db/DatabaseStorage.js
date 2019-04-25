@@ -20,19 +20,13 @@ class DatabaseStorage {
     });
   }
 
+  /**
+   * Returns underlying mongoose instance.
+   *
+   * @returns {Mongoose}
+   */
   getClient() {
     return this.client;
-  }
-
-  /**
-   * Creates new migration.
-   *
-   * @param {String} name
-   * @returns {Promise}
-   */
-  createMigration(name) {
-    const migration = new this.client.models.Migration({ name });
-    return migration.save();
   }
 
   /**

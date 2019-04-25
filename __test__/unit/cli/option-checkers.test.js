@@ -1,5 +1,8 @@
 import { resolve } from 'path';
-import { checkDsn, checkMigrationDirectory } from '../../../src/cli/option-checkers';
+import {
+  checkDsn,
+  checkMigrationDirectory
+} from '../../../src/cli/option-checkers';
 
 describe('checkDsn', () => {
   it('throws error on non mongodb proto', () => {
@@ -18,8 +21,15 @@ describe('checkMigrationDirectory', () => {
   });
 
   it('throws error if path is not a directory', () => {
-    const path = resolve(__dirname, '__fixtures__', 'migrations', 'migrations.js');
-    expect(() => checkMigrationDirectory(path)).toThrowError(/is not a directory/);
+    const path = resolve(
+      __dirname,
+      '__fixtures__',
+      'migrations',
+      'migrations.js'
+    );
+    expect(() => checkMigrationDirectory(path)).toThrowError(
+      /is not a directory/
+    );
   });
 
   it('does not throw error if migrations directory exists', () => {
