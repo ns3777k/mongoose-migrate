@@ -14,12 +14,12 @@ process.env.MONGODB &&
       await storage.disconnect();
     });
 
-    it('applyMigration', async () => {
+    it('applies migrations', async () => {
       const migration = await storage.applyMigration('migration-1');
       expect(migration.name).toStrictEqual('migration-1');
     });
 
-    it('rollbackMigration', async () => {
+    it('rollbacks migrations', async () => {
       await storage.applyMigration('migration-1');
       await storage.applyMigration('migration-2');
       await storage.applyMigration('migration-3');
@@ -36,7 +36,7 @@ process.env.MONGODB &&
       expect(migrations[1].name).toStrictEqual('migration-3');
     });
 
-    it('getAppliedMigrations', async () => {
+    it('queries migrations sorting by creation time desc', async () => {
       await storage.applyMigration('migration-1');
       await storage.applyMigration('migration-2');
       await storage.applyMigration('migration-3');

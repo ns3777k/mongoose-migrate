@@ -29,7 +29,7 @@ describe('FileStorage', () => {
     expect(name).toStrictEqual('/testing/directory/test.js');
   });
 
-  it('create migration file', () => {
+  it('creates migration file', () => {
     const spy = jest.spyOn(Date, 'now').mockImplementation(() => 123456);
     const storage = new FileStorage('/testing/directory');
     const fs = require('fs');
