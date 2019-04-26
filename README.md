@@ -70,6 +70,6 @@ export async function up(mongoose) {
  */
 export async function down(mongoose) {
   mongoose.model('Adv', AdvSchema, 'Adv');
-  await mongoose.model('Confirmation').deleteMany();
+  await mongoose.model('Adv').deleteMany();
 }
 ```
